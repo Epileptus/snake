@@ -1,5 +1,6 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 
 public class Listener implements KeyListener {
 
@@ -9,7 +10,7 @@ public class Listener implements KeyListener {
         this.frame=frame;
         snakeHead = frame.getGamePanel().getSnakeHead();
     }
-
+    Date delay = new Date();
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -17,23 +18,26 @@ public class Listener implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
+        Date newDelay = new Date();
+        while(newDelay.getTime()-delay.getTime()<100){
+            System.out.println("too fast");
 
-        if(e.getKeyCode() == KeyEvent.VK_UP && snakeHead.getYSpeed()!=1){
-            snakeHead.setXSpeed(0);
-            snakeHead.setYSpeed(-1);
+            newDelay = new Date();
         }
-        else if(e.getKeyCode() == KeyEvent.VK_DOWN && snakeHead.getYSpeed()!=-1){
-            snakeHead.setXSpeed(0);
-            snakeHead.setYSpeed(1);
-        }
-        else if(e.getKeyCode() == KeyEvent.VK_LEFT && snakeHead.getXSpeed()!=1){
-            snakeHead.setXSpeed(-1);
-            snakeHead.setYSpeed(0);
-        }
-        else if(e.getKeyCode() == KeyEvent.VK_RIGHT && snakeHead.getXSpeed()!=-1){
-            snakeHead.setXSpeed(1);
-            snakeHead.setYSpeed(0);
-        }
+            delay=newDelay;
+            if (e.getKeyCode() == KeyEvent.VK_UP && snakeHead.getYSpeed() != 1) {
+                snakeHead.setXSpeed(0);
+                snakeHead.setYSpeed(-1);
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN && snakeHead.getYSpeed() != -1) {
+                snakeHead.setXSpeed(0);
+                snakeHead.setYSpeed(1);
+            } else if (e.getKeyCode() == KeyEvent.VK_LEFT && snakeHead.getXSpeed() != 1) {
+                snakeHead.setXSpeed(-1);
+                snakeHead.setYSpeed(0);
+            } else if (e.getKeyCode() == KeyEvent.VK_RIGHT && snakeHead.getXSpeed() != -1) {
+                snakeHead.setXSpeed(1);
+                snakeHead.setYSpeed(0);
+            }
     }
 
     public void keyReleased(KeyEvent e) {
