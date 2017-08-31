@@ -19,11 +19,9 @@ public class Listener implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
         Date newDelay = new Date();
-        while(newDelay.getTime()-delay.getTime()<100){
-            System.out.println("too fast");
-
-            newDelay = new Date();
-        }
+//        while(newDelay.getTime()-delay.getTime()<frame.getDelay()){
+//            newDelay = new Date();
+//        }
             delay=newDelay;
             if (e.getKeyCode() == KeyEvent.VK_UP && snakeHead.getYSpeed() != 1) {
                 snakeHead.setXSpeed(0);

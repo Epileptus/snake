@@ -8,15 +8,23 @@ public class Game {
     public static void main(String[] args) throws InterruptedException, MalformedURLException {
         MainFrame mainFrame;
         while (true) {
-            mainFrame = new MainFrame();
+            mainFrame = new MainFrame(100);
             GamePanel gamePanel = mainFrame.getGamePanel();
             SnakeHead snakeHead = gamePanel.getSnakeHead();
             while (!gamePanel.isDead()) {
-                Thread.sleep(100);
+                Thread.sleep(mainFrame.getDelay());
+                if(snakeHead.getDirX()==0 && snakeHead.getXSpeed()!=0){
+                    snakeHead.setDirX(snakeHead.getXSpeed());
+                    snakeHead.setDirY(0);
+                }
+                else if(snakeHead.getDirY()==0 && snakeHead.getYSpeed()!=0) {
+                    snakeHead.setDirX(0);
+                    snakeHead.setDirY(snakeHead.getYSpeed());
+                }
                 snakeHead.setPreviousX(snakeHead.getX());
                 snakeHead.setPreviousY(snakeHead.getY());
-                snakeHead.setX(snakeHead.getX() + snakeHead.getXSpeed());
-                snakeHead.setY(snakeHead.getY() + snakeHead.getYSpeed());
+                snakeHead.setX(snakeHead.getX() + snakeHead.getDirX());
+                snakeHead.setY(snakeHead.getY() + snakeHead.getDirY());
                 if (gamePanel.canEatFood())
                     gamePanel.eatFood();
                 gamePanel.canDie();

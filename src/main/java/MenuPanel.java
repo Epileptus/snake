@@ -11,7 +11,6 @@ import java.awt.*;
 
          JCheckBox passableWalls = new JCheckBox("Impassable walls");
         this.add(passableWalls);
-        passableWalls.setEnabled(false);
 
         score = new JLabel("Score : 0");
         this.add(score);

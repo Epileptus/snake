@@ -11,12 +11,15 @@ public class SnakeHead implements SnakePart{
     private int y;
     private int previousX;
     private int previousY;
+    private int dirX;
+    private int dirY;
     private final List<SnakePart> parts = new ArrayList<>();
 
     SnakeHead(){
         x=19;
         y=19;
         parts.add(this);
+        //xSpeed=1;
     }
     public void setX(int x){
         if(x>38)

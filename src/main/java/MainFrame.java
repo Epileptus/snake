@@ -5,9 +5,10 @@ import java.awt.*;
 
  class MainFrame extends JFrame {
     private GamePanel gamePanel;
+    private int delay;
 
-
-     MainFrame(){
+     MainFrame(int delay){
+         this.delay=delay;
         setPreferredSize(new Dimension(400,500));
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -37,5 +38,8 @@ import java.awt.*;
     }
      GamePanel getGamePanel(){
         return gamePanel;
+    }
+    int getDelay(){
+        return delay;
     }
 }
