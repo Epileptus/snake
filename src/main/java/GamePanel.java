@@ -1,76 +1,119 @@
-
-
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 
-public class GamePanel extends JPanel{
+public class GamePanel extends JPanel {
 
 
     private int foodX;
     private int foodY;
+    private List<Integer> obstacleX = new ArrayList<>();
+    private List<Integer> obstacleY = new ArrayList<>();
     private Field[][] fields = new Field[40][37];
-    private final SnakePart snakeHead = new SnakeHead();
+    private final SnakeHead snakeHead = new SnakeHead();
     private MenuPanel menuPanel;
     private boolean dead;
 
-     GamePanel(){
-        setMaximumSize(new Dimension(400,400));
-        for(Field[] field : fields){
-            Arrays.fill(field,new Field(""));
+    GamePanel() {
+        setMaximumSize(new Dimension(400, 400));
+        for (Field[] field : fields) {
+            Arrays.fill(field, new Field(""));
         }
         fields[19][19] = new Field("snake");
         createFood();
     }
 
 
-     boolean canEatFood(){
-        return snakeHead.getX() == foodX && snakeHead.getY() == foodY;
+    void canDie() {
+        for (int i = 1; i < snakeHead.getParts().size(); i++) {
+            if (snakeHead.getX() == snakeHead.getParts().get(i).getX() && snakeHead.getY() == snakeHead.getParts().get(i).getY())
+                die();
+        }
+        if (menuPanel.getImpassableWalls().isSelected()) {
+            if (snakeHead.getX() == 0 || snakeHead.getY() == 0)
+                die();
+        }
+        for(int i=0 ; i<obstacleX.size() ; i++){
+            if(snakeHead.getX() == obstacleX.get(i) && snakeHead.getY() == obstacleY.get(i))
+                die();
+        }
+
     }
-     private void createFood(){
+
+    boolean isDead() {
+        return dead;
+    }
+
+    void die() {
+        dead = true;
+    }
+
+    void canEatFood() {
+        if (snakeHead.getX() == foodX && snakeHead.getY() == foodY)
+            eatFood();
+
+    }
+
+    void eatFood() {
+        snakeHead.getParts().add(new SnakeTail(snakeHead.getParts().get(snakeHead.getParts().size() - 1)));
+        menuPanel.getScore().setText("Score : " + (snakeHead.getParts().size() - 1));
+        createFood();
+        canCreateObstacle();
+    }
+
+    private void createFood() {
         Random generator = new Random();
         foodX = generator.nextInt(39);
         foodY = generator.nextInt(36);
-        if(!fields[foodX][foodY].getContent().equals(""))
+        if (!fields[foodX][foodY].isEmpty())
             createFood();
     }
-     void canDie(){
-        for(int i=1 ; i<snakeHead.getParts().size() ; i++){
-            if(snakeHead.getX()==snakeHead.getParts().get(i).getX() && snakeHead.getY()==snakeHead.getParts().get(i).getY()){
 
-                dead=true;
-            }
 
+    private void canCreateObstacle(){
+        if((snakeHead.getParts().size()-1) %5==0){
+            createObstacle();
         }
     }
-     boolean isDead(){
-        return dead;
-    }
-     void eatFood(){
-        snakeHead.getParts().add(new SnakeTail(snakeHead.getParts().get(snakeHead.getParts().size()-1)));
-        //fields[snakeHead.getParts().get(snakeHead.getParts().size()-1).getX()][snakeHead.getParts().get(snakeHead.getParts().size()-1).getY()] = new Field("snake");
-        menuPanel.getScore().setText("Score : " +(snakeHead.getParts().size()-1));
-        createFood();
+    private void createObstacle(){
+        Random generator = new Random();
+        int newX = generator.nextInt(39);
+        int newY = generator.nextInt(36);
+        if (fields[newX][newY].isEmpty() && newX!=snakeHead.getX() && newY!=snakeHead.getY()){
+            obstacleX.add(newX);
+            obstacleY.add(newY);
+        }
+        else
+            createObstacle();
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(Color.BLACK);
 
-        for(Field[] field : fields){
-            Arrays.fill(field,new Field(""));
+        for (Field[] field : fields) {
+            Arrays.fill(field, new Field(""));
         }
+
         fields[foodX][foodY] = new Field("food");
 
-        for(SnakePart part : snakeHead.getParts()){
-            fields[part.getX()][part.getY()]=new Field("snake");
+        if(!obstacleX.isEmpty()){
+            for(int i=0 ; i<obstacleX.size() ; i++){
+                fields[obstacleX.get(i)][obstacleY.get(i)] = new Field("obstacle");
+            }
+        }
+
+        for (SnakePart part : snakeHead.getParts()) {
+            fields[part.getX()][part.getY()] = new Field("snake");
         }
 
 
-        for(int i=0 ; i<40 ;i++){
-            for(int k=0 ; k<37 ; k++){
+        for (int i = 0; i < 40; i++) {
+            for (int k = 0; k < 37; k++) {
                 switch (fields[i][k].getContent()) {
                     case "snake":
                         g.setColor(Color.WHITE);
@@ -78,19 +121,27 @@ public class GamePanel extends JPanel{
                     case "food":
                         g.setColor(Color.GREEN);
                         break;
+                    case "obstacle":
+                        g.setColor(Color.RED);
+                        break;
                     default:
                         g.setColor(Color.BLACK);
                         break;
                 }
-
-                g.fillRect(i*10,k*10,10,10);
+                g.fillRect(i * 10, k * 10, 10, 10);
             }
         }
     }
-     SnakeHead getSnakeHead(){
-        return (SnakeHead) snakeHead;
+
+    SnakeHead getSnakeHead() {
+        return snakeHead;
     }
-     void setMenuPanel(MenuPanel menuPanel){
-        this.menuPanel=menuPanel;
+
+    void setMenuPanel(MenuPanel menuPanel) {
+        this.menuPanel = menuPanel;
+    }
+
+    MenuPanel getMenuPanel() {
+        return menuPanel;
     }
 }
