@@ -42,8 +42,7 @@ public class Listener implements KeyListener {
             frame.getGamePanel().die();
             frame.setOver();
         }
-        frame.getGamePanel().getMenuPanel().getImpassableWalls().setEnabled(false);
-        frame.getGamePanel().getMenuPanel().getImpassableWallsDescription().setEnabled(false);
+        frame.getGamePanel().getMenuPanel().disableOptions();
     }
 
     void setReady() {

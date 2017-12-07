@@ -4,7 +4,7 @@ import java.awt.*;
 class MenuPanel extends JPanel {
     private JLabel score;
     private JCheckBox impassableWalls;
-    private JLabel impassableWallsDescription;
+    private JCheckBox epilepsyMode;
 
     MenuPanel() {
         setMaximumSize(new Dimension(400, 100));
@@ -12,12 +12,14 @@ class MenuPanel extends JPanel {
         SpringLayout layout = new SpringLayout();
         this.setLayout(layout);
 
-        impassableWalls = new JCheckBox();
+        impassableWalls = new JCheckBox("Impassable walls");
         this.add(impassableWalls);
 
-        impassableWallsDescription = new JLabel("Impassable walls");
-        this.add(impassableWallsDescription);
-        layout.putConstraint(SpringLayout.WEST, impassableWallsDescription, 0, SpringLayout.EAST, impassableWalls);
+
+        epilepsyMode = new JCheckBox("Epilepsy mode");
+        this.add(epilepsyMode);
+        layout.putConstraint(SpringLayout.NORTH, epilepsyMode, 0, SpringLayout.SOUTH, impassableWalls);
+
 
         score = new JLabel("Score : 0");
         this.add(score);
@@ -31,7 +33,18 @@ class MenuPanel extends JPanel {
     JCheckBox getImpassableWalls() {
         return impassableWalls;
     }
-    JLabel getImpassableWallsDescription() {
-        return impassableWallsDescription;
+
+    JCheckBox getEpilepsyMode() {
+        return epilepsyMode;
+    }
+
+    void enableOptions() {
+        impassableWalls.setEnabled(true);
+        epilepsyMode.setEnabled(true);
+    }
+
+    void disableOptions() {
+        impassableWalls.setEnabled(false);
+        epilepsyMode.setEnabled(false);
     }
 }

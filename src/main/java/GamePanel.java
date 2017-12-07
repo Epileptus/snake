@@ -37,8 +37,8 @@ public class GamePanel extends JPanel {
             if (snakeHead.getX() == 0 || snakeHead.getY() == 0)
                 die();
         }
-        for(int i=0 ; i<obstacleX.size() ; i++){
-            if(snakeHead.getX() == obstacleX.get(i) && snakeHead.getY() == obstacleY.get(i))
+        for (int i = 0; i < obstacleX.size(); i++) {
+            if (snakeHead.getX() == obstacleX.get(i) && snakeHead.getY() == obstacleY.get(i))
                 die();
         }
 
@@ -74,20 +74,20 @@ public class GamePanel extends JPanel {
     }
 
 
-    private void canCreateObstacle(){
-        if((snakeHead.getParts().size()-1) %5==0){
+    private void canCreateObstacle() {
+        if ((snakeHead.getParts().size() - 1) % 5 == 0) {
             createObstacle();
         }
     }
-    private void createObstacle(){
+
+    private void createObstacle() {
         Random generator = new Random();
         int newX = generator.nextInt(39);
         int newY = generator.nextInt(36);
-        if (fields[newX][newY].isEmpty() && newX!=snakeHead.getX() && newY!=snakeHead.getY()){
+        if (fields[newX][newY].isEmpty() && newX != snakeHead.getX() && newY != snakeHead.getY()) {
             obstacleX.add(newX);
             obstacleY.add(newY);
-        }
-        else
+        } else
             createObstacle();
     }
 
@@ -101,8 +101,8 @@ public class GamePanel extends JPanel {
 
         fields[foodX][foodY] = new Field("food");
 
-        if(!obstacleX.isEmpty()){
-            for(int i=0 ; i<obstacleX.size() ; i++){
+        if (!obstacleX.isEmpty()) {
+            for (int i = 0; i < obstacleX.size(); i++) {
                 fields[obstacleX.get(i)][obstacleY.get(i)] = new Field("obstacle");
             }
         }
@@ -116,7 +116,25 @@ public class GamePanel extends JPanel {
             for (int k = 0; k < 37; k++) {
                 switch (fields[i][k].getContent()) {
                     case "snake":
-                        g.setColor(Color.WHITE);
+                        if (!menuPanel.getEpilepsyMode().isSelected())
+                            g.setColor(Color.WHITE);
+                        else {
+                            Random generator = new Random();
+                            int x = generator.nextInt(2);
+                            int y = generator.nextInt(155) + 100;
+                            int z = generator.nextInt(155) + 100;
+                            switch (x) {
+                                case 0:
+                                    g.setColor(new Color(0, y, z));
+                                    break;
+                                case 1:
+                                    g.setColor(new Color(y, 0, z));
+                                    break;
+                                default:
+                                    g.setColor(new Color(y, z, 0));
+                                    break;
+                            }
+                        }
                         break;
                     case "food":
                         g.setColor(Color.GREEN);

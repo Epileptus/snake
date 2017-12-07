@@ -1,16 +1,19 @@
 import javax.swing.*;
-import java.net.MalformedURLException;
 
 public class Game {
 
 
-    public static void main(String[] args) throws InterruptedException, MalformedURLException {
+    public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame(100);
         GamePanel gamePanel = mainFrame.getGamePanel();
         while (!mainFrame.isOver()) {
             while (!gamePanel.isDead()) {
 
-                Thread.sleep(mainFrame.getDelay());
+                try {
+                    Thread.sleep(mainFrame.getDelay());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 mainFrame.requestFocus();
 
@@ -29,8 +32,7 @@ public class Game {
                 mainFrame.dispose();
                 mainFrame = new MainFrame(100);
                 gamePanel = mainFrame.getGamePanel();
-                gamePanel.getMenuPanel().getImpassableWalls().setEnabled(true);
-                gamePanel.getMenuPanel().getImpassableWallsDescription().setEnabled(true);
+                gamePanel.getMenuPanel().enableOptions();
             }
         }
         mainFrame.dispose();
